@@ -76,7 +76,11 @@ $("#login-form").submit(function(e)
                     },
                     error: function(xhr, status, error)
                     {
-                        alert(xhr.responseText);
+                        Swal.fire({
+                            html: xhr.responseText,
+                            icon: 'error',
+                            title: "Ocurri&oacute; un error"
+                          });                     
                     }
                 });
             }, 2500);

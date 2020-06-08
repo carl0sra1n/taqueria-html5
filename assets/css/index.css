@@ -21,6 +21,10 @@
     overflow-y: scroll; 
     height: 300px; 
 }
+.contenido-derecha{ 
+    overflow-y: scroll; 
+    height: 28rem; 
+}
 .tablaFija thead th { 
     position: sticky; top: 0
 }

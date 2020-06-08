@@ -54,6 +54,29 @@ function loginUsuario()
     echo json_encode($data);
 }
 
+function getMenu()
+{
+    $conn = ConectaBD();
+    $data = array();
+
+    $sQuery = "SELECT id, nombre, imagen, precio FROM menu";
+    
+    $res = mysqli_query($conn, $sQuery);
+
+    if($res)
+    {
+        if(mysqli_num_rows($res) > 0)
+        {
+            while($row = mysqli_fetch_array($res))
+            {
+                $data[] = $row;
+            }
+        }
+    }
+
+    echo json_encode($data);
+}
+
 
 if(isset($_GET["opc"]))
 {
@@ -63,6 +86,9 @@ if(isset($_GET["opc"]))
     {
         case "loginUsuario":
             loginUsuario();
+        break;
+        case "getMenu":
+            getMenu();
         break;
     }
 }
