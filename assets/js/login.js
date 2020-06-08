@@ -42,27 +42,36 @@ $("#login-form").submit(function(e)
                     data: form,
                     success: function(data)
                     {
-                        respuesta = JSON.parse(data);
-                        if(parseInt(respuesta.estado) == 0)
+                        try 
                         {
+                            respuesta = JSON.parse(data);
+                            if(parseInt(respuesta.estado) == 0)
+                            {
+                                Swal.fire({
+                                    title: respuesta.mensaje,
+                                    icon: 'success',
+                                    showCancelButton: false,
+                                    allowOutsideClick: false,
+                                    confirmButtonText: 'Ingresar',
+                                }).then((result) => {
+                                    if (result.value) {
+                                        console.log("presion boton");
+                                    }
+                                });
+                            }
+                            else
+                            {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: respuesta.mensaje
+                                  });       
+                            }                            
+                        } catch (e) {
                             Swal.fire({
-                                title: respuesta.mensaje,
-                                icon: 'success',
-                                showCancelButton: false,
-                                allowOutsideClick: false,
-                                confirmButtonText: 'Ingresar',
-                            }).then((result) => {
-                                if (result.value) {
-                                    console.log("presion boton");
-                                }
-                            });
-                        }
-                        else
-                        {
-                            Swal.fire({
+                                html: data,
                                 icon: 'error',
-                                title: respuesta.mensaje
-                              });       
+                                title: "Ocurri&oacute; un error"
+                              }); 
                         }
                     },
                     error: function(xhr, status, error)
