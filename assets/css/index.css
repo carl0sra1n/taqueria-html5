@@ -1,0 +1,13 @@
+.navbar-logo {
+  width: 90px;
+}
+.inicio {
+    padding: 4rem 1.5rem;
+    text-align: center;
+  }
+.card {
+    display:inline-block;
+}
+.jumbotron{
+    padding: 20px;
+}

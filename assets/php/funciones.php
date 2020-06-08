@@ -5,6 +5,8 @@ include("conexion.php");
 
 function loginUsuario()
 {
+    session_destroy();
+
     $data = array("estado" => -1, "mensaje" => "No se ejecutó función loginUsuario()");
     
     if(!isset($_SESSION["usuario"]))
