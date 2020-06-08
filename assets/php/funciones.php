@@ -105,6 +105,54 @@ function insertPedido()
     echo json_encode($data);
 }
 
+function cerrarSesion()
+{
+    session_destroy();
+    echo json_encode($data = array("mensaje" => "OK", "estado" => 0));
+}
+
+function registroUsuario()
+{
+    $conn = ConectaBD();
+
+    $data = array("mensaje" => "No se ejecutó función registroUsuario()", "estado" => -1);
+
+    $usuario = $_GET["usuario"];
+    $nombre = $_GET["nombre"];
+    $direccion = $_GET["direccion"];
+    $telefono = $_GET["telefono"];
+    $correo = $_GET["correo"];
+    $password = crypt($_GET["password"], 'password');
+
+    $sQuery = "SELECT true FROM clientes WHERE correo = '" . $correo . "' OR usuario = '" . $usuario . "'";
+
+    $res = mysqli_query($conn, $sQuery);
+
+    $existeusuario = false;
+    while($row = mysqli_fetch_array($res))
+    {
+        $existeusuario = true;
+    }
+
+    if($existeusuario != true)
+    {
+        $sQuery = "INSERT INTO clientes (usuario, nombre, direccion, telefono, correo, password) VALUES ('" . $usuario . "', '" . $nombre . "', '" . $direccion . "', '" . $telefono . "', '" . $correo . "', '" . $password . "');";
+    
+        $res = mysqli_query($conn, $sQuery);
+    
+        if($res)
+        {
+            $data = array("mensaje" => "Se registro al usuario correctamente. Ya puede iniciar sesi&oacute;n", "estado" => 0);
+        }
+    }
+    else
+    {
+        $data = array("mensaje" => "Ya existe un usuario con el correo o nombre de usuario que ingresaste. Por favor verifica.", "estado" => -1);
+    }
+
+    echo json_encode($data);
+}
+
 
 if(isset($_GET["opc"]))
 {
@@ -123,6 +171,12 @@ if(isset($_GET["opc"]))
         break;
         case "insertPedido":
             insertPedido();
+        break;
+        case "cerrarSesion":
+            cerrarSesion();
+        break;
+        case "registroUsuario":
+            registroUsuario();
         break;
     }
 }

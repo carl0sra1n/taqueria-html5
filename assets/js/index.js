@@ -291,6 +291,42 @@ function insertPedido()
     limpiarPedido();
 }
 
+function cerrarSesion()
+{
+    $.ajax({
+        type: "GET",
+        url: "assets/php/funciones.php",
+        data: {
+            opc: "cerrarSesion"
+        },
+        success: function(data)
+        {
+            try 
+            {
+                respuesta = JSON.parse(data);
+                if(respuesta.estado == 0)
+                {
+                    window.location.replace("login.html");
+                }
+            } catch (e) {
+                Swal.fire({
+                    html: data,
+                    icon: 'error',
+                    title: "Ocurri&oacute; un error"
+                  }); 
+            }
+        },
+        error: function(xhr, status, error)
+        {
+            Swal.fire({
+                html: xhr.responseText,
+                icon: 'error',
+                title: "Ocurri&oacute; un error"
+              }); 
+        }
+    });
+}
+
 $(document).ready(function() {
     getMenu();
     fechaHora();
@@ -302,4 +338,8 @@ $("#btnCancelarPedido").click(function() {
 
 $("#btnRealizarPedido").click(function() {
     insertPedido();
+});
+
+$("#btnCerrarSesion").click(function() {
+    cerrarSesion();
 });

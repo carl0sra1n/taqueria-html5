@@ -15,25 +15,66 @@
                     <div id="login-column" class="col-md-6">
                         <div class="card">
                             <div class="card-body shadow">
-                                <form id="login-form" class="form" action="assets/php/funciones.php" method="get" autocomplete="off">
-                                    <h3 class="text-center text-warning">Inicio de sesi&oacute;n</h3>
-                                    <div class="form-group">
-                                        <label for="correo" class="text-warning">Correo:</label><br>
-                                        <input type="text" name="correo" id="correo" class="form-control" placeholder="Ingresa tu correo electronico">
+                                <ul class="nav nav-tabs" id="myTab">
+                                    <li class="nav-item">
+                                        <a href="#iniciar_sesion" class="nav-link text-warning" data-toggle="tab">Iniciar sesi&oacute;n</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="#registro" class="nav-link text-warning" data-toggle="tab">Registro</a>
+                                    </li>
+                                </ul>
+                                <div class="tab-content">
+                                    <div class="tab-pane fade" id="iniciar_sesion">
+                                        <form id="login-form" class="form" action="assets/php/funciones.php" method="get" autocomplete="off">
+                                            <div class="form-group">
+                                                <label for="correo" class="text-warning">Correo:</label><br>
+                                                <input type="text" name="correo" id="correo" class="form-control" placeholder="Ingresa tu correo electronico">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="password" class="text-warning">Contrase&ntilde;a:</label><br>
+                                                <input type="password" name="password" id="password" class="form-control" placeholder="Ingresa tu contrase&ntilde;a">
+                                            </div>
+                                            <div class="form-group">
+                                                <br>
+                                                <input type="hidden" name="opc" value="loginUsuario">
+                                                <input type="submit" name="submit" class="btn btn-info btn-md" value="Enviar">
+                                            </div>
+                                        </form>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="password" class="text-warning">Contrase&ntilde;a:</label><br>
-                                        <input type="password" name="password" id="password" class="form-control" placeholder="Ingresa tu contrase&ntilde;a">
+                                    <div class="tab-pane fade" id="registro">
+                                        <form id="register-form" class="form" action="assets/php/funciones.php" method="get" autocomplete="off">
+                                            <div class="form-group">
+                                                <label for="usuario_reg" class="text-warning">Usuario:</label><br>
+                                                <input type="text" name="usuario" id="usuario_reg" class="form-control" placeholder="Ingresa un usuario">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="nombre_reg" class="text-warning">Nombre completo:</label><br>
+                                                <input type="text" name="nombre" id="nombre_reg" class="form-control" placeholder="Ingresa tu nombre completo">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="direccion_reg" class="text-warning">Direcci&oacute;n:</label><br>
+                                                <input type="text" name="direccion" id="direccion_reg" class="form-control" placeholder="Ingresa tu direcci&oacute;n postal">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="telefono_reg" class="text-warning">Telef&oacute;no</label><br>
+                                                <input type="text" name="telefono" id="telefono_reg" class="form-control" placeholder="Ingresa tu telef&oacute;no">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="correo_reg" class="text-warning">Correo:</label><br>
+                                                <input type="text" name="correo" id="correo_reg" class="form-control" placeholder="Ingresa tu correo electronico">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="password_reg" class="text-warning">Contrase&ntilde;a:</label><br>
+                                                <input type="password" name="password" id="password_reg" class="form-control" placeholder="Ingresa tu contrase&ntilde;a">
+                                            </div>
+                                            <div class="form-group">
+                                                <br>
+                                                <input type="hidden" name="opc" value="registroUsuario">
+                                                <input type="submit" name="submit" class="btn btn-info btn-md" value="Enviar">
+                                            </div>
+                                        </form>
                                     </div>
-                                    <div class="form-group">
-                                        <br>
-                                        <input type="hidden" name="opc" value="loginUsuario">
-                                        <input type="submit" name="submit" class="btn btn-info btn-md" value="Enviar">
-                                    </div>
-                                    <div id="register-link" class="text-right">
-                                        <a href="#" class="text-warning">  </a>
-                                    </div>
-                                </form>                            
+                                </div>                           
                             </div>
                           </div>
                     </div>
