@@ -4,9 +4,7 @@ session_start();
 include("conexion.php");
 
 function loginUsuario()
-{
-    session_destroy();
-
+{    
     $data = array("estado" => -1, "mensaje" => "No se ejecutó función loginUsuario()");
     
     if(!isset($_SESSION["usuario"]))
@@ -16,7 +14,7 @@ function loginUsuario()
         $correo = $_GET["correo"];
         $password = crypt($_GET["password"], 'password');
 
-        $sQuery = "SELECT usuario, nombre, direccion, telefono, correo FROM clientes WHERE correo = '" . $correo . "' AND password = '" . $password . "' LIMIT 1";
+        $sQuery = "SELECT id, usuario, nombre, direccion, telefono, correo FROM clientes WHERE correo = '" . $correo . "' AND password = '" . $password . "' LIMIT 1";
         
         $res = mysqli_query($conn, $sQuery);
     
@@ -26,6 +24,7 @@ function loginUsuario()
             {
                 while($row = mysqli_fetch_array($res))
                 {
+                    $_SESSION["id"] = $row["id"];
                     $_SESSION["usuario"] = $row["usuario"];
                     $_SESSION["nombre"] = $row["nombre"];
                     $_SESSION["direccion"] = $row["direccion"];
@@ -77,6 +76,35 @@ function getMenu()
     echo json_encode($data);
 }
 
+function getUsuarioLogueado()
+{
+    echo json_encode($_SESSION);
+}
+
+function insertPedido()
+{
+    $conn = ConectaBD();
+
+    $data = array("mensaje" => "No se ejecutó función insertPedido()", "estado" => -1);
+
+    $id_pedido = $_GET["idpedido"];
+    $fecha = $_GET["fecha"];
+    $id_cliente = $_GET["id_cliente"];
+    $id_producto = $_GET["id_producto"];
+    $cantidad = $_GET["cantidad"];
+
+    $sQuery = "INSERT INTO pedidos (id_pedido, fecha, id_cliente, id_producto, cantidad) VALUES ('" . $id_pedido . "', '" . $fecha . "', " . $id_cliente . ", ". $id_producto . ", " . $cantidad . ")";
+    
+    $res = mysqli_query($conn, $sQuery);
+
+    if($res)
+    {
+        $data = array("mensaje" => "OK", "estado" => 0);
+    }
+
+    echo json_encode($data);
+}
+
 
 if(isset($_GET["opc"]))
 {
@@ -89,6 +117,12 @@ if(isset($_GET["opc"]))
         break;
         case "getMenu":
             getMenu();
+        break;
+        case "getUsuarioLogueado":
+            getUsuarioLogueado();
+        break;
+        case "insertPedido":
+            insertPedido();
         break;
     }
 }

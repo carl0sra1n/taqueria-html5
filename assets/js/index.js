@@ -1,5 +1,10 @@
 var arrayMenu = [];
 var arrayPedido = [];
+var arrayPedidoRealizar = [];
+var id_usuario = 0;
+var id_pedido = "P" + Math.floor((Math.random() * 100000) + 1);
+
+getUsuarioLogueado();
 
 function getMenu()
 {
@@ -90,6 +95,20 @@ function updateTablaPedido()
         htmlTabla += "</tr>";
         totalPedido += preciototal;
         totalArticulos += totalesEspecifico[i].total;
+
+        var pedidoRealizar = {
+            idpedido: id_pedido,
+            fecha: moment().format('YYYY-MM-DD HH:mm:ss'),
+            id_cliente: id_usuario,
+            id_producto: id,
+            cantidad: totalesEspecifico[i].total
+        };
+        
+        arrayPedidoRealizar = $.grep(arrayPedidoRealizar, function(e){ 
+            return e.id_producto != pedidoRealizar.id_producto;
+        });
+
+        arrayPedidoRealizar.push(pedidoRealizar);
     }
     $("#tablaPedido").append(htmlTabla);
     $("#totalPedido").html(totalPedido);
@@ -129,7 +148,7 @@ function removeProductoPedido(in_id)
 {
     arrayPedido = $.grep(arrayPedido, function(e){ 
         return e.id != in_id;
-   });
+    });
 
    updateTablaPedido();
 
@@ -149,9 +168,11 @@ function removeProductoPedido(in_id)
   });
 }
 
-function cancelarPedido()
+function limpiarPedido()
 {
     arrayPedido = [];
+    arrayPedidoRealizar = [];
+    id_pedido = "P" + Math.floor((Math.random() * 10000) + 1);
 
     updateTablaPedido();
 }
@@ -165,11 +186,120 @@ function fechaHora()
     }, 100);
 }
 
+function getUsuarioLogueado()
+{
+    $.ajax({
+        type: "GET",
+        url: "assets/php/funciones.php",
+        data: {
+            opc: "getUsuarioLogueado"
+        },
+        success: function(data)
+        {
+            try 
+            {
+                respuesta = JSON.parse(data);
+                if(respuesta.id != undefined)
+                {
+                    id_usuario = respuesta.id;
+                }
+                else
+                {
+                    window.location.replace("login.html");
+                }
+            } catch (e) {
+                Swal.fire({
+                    html: data,
+                    icon: 'error',
+                    title: "Ocurri&oacute; un error"
+                  }); 
+            }
+        },
+        error: function(xhr, status, error)
+        {
+            Swal.fire({
+                html: xhr.responseText,
+                icon: 'error',
+                title: "Ocurri&oacute; un error"
+              }); 
+        }
+    });
+}
+
+function insertPedido()
+{
+    for(var i = 0; i < arrayPedidoRealizar.length; i++)
+    {
+        $.ajax({
+            type: "GET",
+            url: "assets/php/funciones.php",
+            data: {
+                opc: "insertPedido",
+                idpedido: id_pedido,
+                fecha: arrayPedidoRealizar[i].fecha,
+                id_cliente: arrayPedidoRealizar[i].id_cliente,
+                id_producto: arrayPedidoRealizar[i].id_producto,
+                cantidad: arrayPedidoRealizar[i].cantidad
+            },
+            success: function(data)
+            {
+                try 
+                {
+                    respuesta = JSON.parse(data);
+                    if(respuesta.estado == -1)
+                    {
+                        Swal.fire({
+                            html: data,
+                            icon: 'error',
+                            title: "Ocurri&oacute; un error al realizar pedido: " + respuesta.mensaje
+                        }); 
+                    }
+                } catch (e) {
+                    Swal.fire({
+                        html: data,
+                        icon: 'error',
+                        title: "Ocurri&oacute; un error"
+                    }); 
+                }
+            },
+            error: function(xhr, status, error)
+            {
+                Swal.fire({
+                    html: xhr.responseText,
+                    icon: 'error',
+                    title: "Ocurri&oacute; un error"
+                  }); 
+            }
+        });
+    }
+
+    if(arrayPedidoRealizar.length > 0)
+    {
+        Swal.fire({
+            icon: 'success',
+            title: "Se realizó tu pedido."
+        });
+    }
+    else
+    {
+        Swal.fire({
+            icon: 'warning',
+            title: "El pedido está vacio."
+        });
+    }
+
+    limpiarPedido();
+}
+
 $(document).ready(function() {
     getMenu();
     fechaHora();
 });
 
 $("#btnCancelarPedido").click(function() {
-    cancelarPedido();
+    limpiarPedido();
+});
+
+$("#btnRealizarPedido").click(function() {
+    insertPedido();
 });
