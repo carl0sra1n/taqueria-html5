@@ -71,6 +71,7 @@ function updateTablaPedido()
     {
         var preciototal = 0;
         var precioindividual = 0;
+        var id = 0;
 
         for(var j = 0; j < arrayMenu.length; j++)
         {
@@ -78,10 +79,11 @@ function updateTablaPedido()
             {
                 preciototal = parseInt(arrayMenu[j].precio) * (totalesEspecifico[i].total);
                 precioindividual = arrayMenu[j].precio;
+                id = arrayMenu[j].id;
             }
         }
         htmlTabla += "<tr>";
-        htmlTabla += "<th scope=\"row\"><a href=\"#\" class=\"badge badge-danger\">X</a></th>";
+        htmlTabla += "<th scope=\"row\"><a href=\"javascript:void(0)\" onclick=\"removeProductoPedido(" + id + ")\" class=\"badge badge-danger\">X</a></th>";
         htmlTabla += "<td><span class=\"badge badge-warning\">" + totalesEspecifico[i].nombre.toUpperCase() + " @ $" + precioindividual + ".00</span></td>";
         htmlTabla += "<td>" + totalesEspecifico[i].total + "</td>";
         htmlTabla += "<td>$" + preciototal + ".00</td>";
@@ -123,4 +125,41 @@ function addPedido(in_id, in_nombre, in_precio)
       });
 }
 
-getMenu();
+function removeProductoPedido(in_id)
+{
+    arrayPedido = $.grep(arrayPedido, function(e){ 
+        return e.id != in_id;
+   });
+
+   updateTablaPedido();
+
+   Swal.mixin({
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+    onOpen: (toast) => {
+      toast.addEventListener('mouseenter', Swal.stopTimer)
+      toast.addEventListener('mouseleave', Swal.resumeTimer)
+    }
+  }).fire({
+    icon: 'success',
+    title: 'Se eliminó el articulo de tu pedido'
+  });
+}
+
+function cancelarPedido()
+{
+    arrayPedido = [];
+
+    updateTablaPedido();
+}
+
+$(document).ready(function() {
+    getMenu();
+});
+
+$("#btnCancelarPedido").click(function() {
+    cancelarPedido();
+});
