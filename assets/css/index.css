@@ -9,5 +9,18 @@
     display:inline-block;
 }
 .jumbotron{
-    padding: 20px;
+    padding: 10px;
+}
+.contenido{
+    height: 28rem;
+}
+.contenedores{
+    height: 28rem;
+}
+.tablaFija{ 
+    overflow-y: scroll; 
+    height: 300px; 
+}
+.tablaFija thead th { 
+    position: sticky; top: 0
 }
