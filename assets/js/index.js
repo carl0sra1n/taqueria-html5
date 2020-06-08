@@ -48,8 +48,55 @@ function getMenu()
     });
 }
 
+function updateTablaPedido()
+{
+    var totales = arrayPedido.reduce((p, c) => {
+        var name = c.nombre;
+        if (!p.hasOwnProperty(name)) {
+          p[name] = 0;
+        }
+        p[name]++;
+        return p;
+    }, {});
+
+    var totalesEspecifico = Object.keys(totales).map(k => {
+        return {nombre: k, total: totales[k]}; 
+    });
+
+    var htmlTabla = "";
+    var totalPedido = 0;
+    var totalArticulos = 0;
+    $("#tablaPedido").html(htmlTabla);
+    for(var i = 0; i < totalesEspecifico.length; i++)
+    {
+        var preciototal = 0;
+        var precioindividual = 0;
+
+        for(var j = 0; j < arrayMenu.length; j++)
+        {
+            if(arrayMenu[j].nombre == totalesEspecifico[i].nombre)
+            {
+                preciototal = parseInt(arrayMenu[j].precio) * (totalesEspecifico[i].total);
+                precioindividual = arrayMenu[j].precio;
+            }
+        }
+        htmlTabla += "<tr>";
+        htmlTabla += "<th scope=\"row\"><a href=\"#\" class=\"badge badge-danger\">X</a></th>";
+        htmlTabla += "<td><span class=\"badge badge-warning\">" + totalesEspecifico[i].nombre.toUpperCase() + " @ $" + precioindividual + ".00</span></td>";
+        htmlTabla += "<td>" + totalesEspecifico[i].total + "</td>";
+        htmlTabla += "<td>$" + preciototal + ".00</td>";
+        htmlTabla += "</tr>";
+        totalPedido += preciototal;
+        totalArticulos += totalesEspecifico[i].total;
+    }
+    $("#tablaPedido").append(htmlTabla);
+    $("#totalPedido").html(totalPedido);
+    $("#totalArticulos").html(totalArticulos);
+}
+
 function addPedido(in_id, in_nombre, in_precio)
 {
+
     var pedido = {
         id: in_id,
         nombre: in_nombre,
@@ -58,10 +105,7 @@ function addPedido(in_id, in_nombre, in_precio)
 
     arrayPedido.push(pedido)
 
-    for(var i = 0; i < arrayPedido.length; i++)
-    {
-        
-    }
+    updateTablaPedido();
 
     Swal.mixin({
         toast: true,
@@ -77,8 +121,6 @@ function addPedido(in_id, in_nombre, in_precio)
         icon: 'success',
         title: 'Se agregó un ' + in_nombre + ' a tu pedido'
       });
-
-
 }
 
 getMenu();
