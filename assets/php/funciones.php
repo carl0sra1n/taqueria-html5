@@ -12,10 +12,10 @@ function loginUsuario()
         $conn = ConectaBD();
 
         $correo = $_GET["correo"];
-        $password = $_GET["password"];
+        $password = crypt($_GET["password"], 'password');
 
-        $sQuery = "SELECT usuario, nombre, direccion, telefono, correo FROM clientes WHERE correo = '" . $correo . "' AND password = ENCRYPT('" . $password . "', 'password') LIMIT 1";
-    
+        $sQuery = "SELECT usuario, nombre, direccion, telefono, correo FROM clientes WHERE correo = '" . $correo . "' AND password = '" . $password . "' LIMIT 1";
+        
         $res = mysqli_query($conn, $sQuery);
     
         if($res)

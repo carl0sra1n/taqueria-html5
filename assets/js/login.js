@@ -55,7 +55,7 @@ $("#login-form").submit(function(e)
                                     confirmButtonText: 'Ingresar',
                                 }).then((result) => {
                                     if (result.value) {
-                                        console.log("presion boton");
+                                        window.location.replace("index.html");
                                     }
                                 });
                             }
