@@ -156,8 +156,18 @@ function cancelarPedido()
     updateTablaPedido();
 }
 
+function fechaHora()
+{     
+    setInterval(function() {
+        var momentNow = moment();
+        $('#date-part').html(momentNow.format('dddd').substring(0,3).toUpperCase() + " " + momentNow.format('DD MMMM YYYY'));
+        $('#time-part').html(momentNow.format('hh:mm:ss A'));
+    }, 100);
+}
+
 $(document).ready(function() {
     getMenu();
+    fechaHora();
 });
 
 $("#btnCancelarPedido").click(function() {
